@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Elibyy\TCPDF\Facades\TCPDF as PDF;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -11,8 +11,7 @@ class HomeController extends Controller
 {
     function post(Request $request)
     {
-        $data = $request->all();
-
+        $data = $request->all(); 
         // Stamp scale is 1.5, change to 1.
         $stampX = ($data['stampX'] / 1.5);
         $stampY = ($data['stampY'] / 1.5);
@@ -54,8 +53,9 @@ class HomeController extends Controller
         $pdfContent = PDF::Output('TheArKa.pdf', 'S'); // Output PDF ke dalam string
         $filePath = public_path('TheArKa.pdf');
         file_put_contents($filePath, $pdfContent); // save to external server
-        $newUrl = asset('TheArKa.pdf');
+        $newUrl = asset('TheArKa.pdf');   
+
         // I: Show to Browser, D: Download, F: Save to File, S: Return as String
-        return PDF::Output('TheArKa.pdf', 'I');
+        return view('welcome', ['pdfUrl' => $newUrl]);
     }
 }
